@@ -1,0 +1,176 @@
+{% extends 'base/base.html' %}
+
+<!-- ================================================ -->
+<!-- PANTALLA AGREGAR USUARIO -->
+<!-- ================================================ -->
+{% block agregar_usuario %}
+
+<main class="col-md-9 ms-sm-auto col-lg-10">
+    <div class="chartjs-size-monitor">
+        <div class="chartjs-size-monitor-expand">
+            <div class></div>
+        </div>
+        <div class="chartjs-size-monitor-shrink">
+            <div class=""></div>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);"
+        aria-label="breadcrumb">
+        <ol class="breadcrumb bg-light" style="padding: 15px; border: 0">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/usuario">Configuración de usuarios</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ data.titulo }} / {{ data.subtitulo }}</li>
+        </ol>
+    </nav>
+
+    <!-- ================================================ -->
+    <!-- PANTALLA ASIGNAR NUEVO TURNO -->
+    <!-- ================================================ -->
+
+    <div class="card border-success mb-3">
+        <div class="card-header bg-transparent border-success">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-0">
+                <h4 class="h4">{{ data.titulo }} / {{ data.subtitulo }}</h4>
+            </div>
+        </div>
+
+        <div class="card-body text-dark">
+            <h5 class="card-title">Recurso seleccionado</h5>
+
+            <div class="container">
+                <table class="table text-secondary">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre y Apellido</th>
+                            <th scope="col">Nro. de documento</th>
+                            <th scope="col">Tipo de recurso</th>
+                            <th scope="col">Legajo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ data.recurso[1] }} {{data.recurso[2] }}</td>
+                            <td>{{ data.recurso[3] }}</td>
+                            <td>{{ data.recurso[5]}}</td>
+                            <td>{{ data.recurso[6]}} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-body border-top">
+            <h5 class="card-title">Seleccionar turno</h5>
+            <div class="container">
+                <form action="/grabar_turno" method="POST">
+                    <div class="row g-3">
+                        <input type="hidden" value={{data.recurso[0]}} name="inputRecursoId">
+                        <div class="col-md-6 mb-3">
+                            <label for="NombreUsuarioInput1" class="form-label">Nombre de usuario</label>
+                            <input type="text" class="form-control" name="NombreUsuarioInput1">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="inputPasswordUsuario" class="form-label">Contraseña</label>
+                            <input type="password" name="inputPasswordUsuario" class="form-control"
+                                aria-describedby="passwordHelpBlock">
+                            <div id="passwordHelpBlock" class="form-text">
+                                La clave debe contener hasta 8 dígitos. Debe ser alfanúmerico y no debe contener
+                                caracteres especiales.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="inputPasswordRepetir" class="form-label">Repetir contraseña</label>
+                            <input type="password" class="form-control" name="inputPasswordRepetir">
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+        <div class="card-body border-top">
+            <h5 class="card-title">Seleccionar roles y privilegios</h5>
+            <div class="container">
+                <form action="/grabar_turno" method="POST">
+                    <div class="row">
+                        <div class="col-6">
+                            <div><h6>Roles</h6></div>
+                            <ul class="list-group">
+                                {% for rol in data.rol %}
+                                <li class="list-group-item">
+                                <div class="form-check">
+                                  <input class="form-check-input me-1" type="radio" value={{rol[0]}} id={{rol[0]}} name="checkRol">
+                                  <label class="form-check-label" for="flexRadioDefault1">
+                                  {{rol[1]}}
+                                </label>
+                                </div>
+                            </li>
+                                {% endfor %}
+                              </ul>
+                            </div>
+                            <div class="col-6">
+                                <div><h6>Privilegios</h6></div>
+                                <ul class="list-group">   
+                                    {% for privilegios in data.privilegios %}
+                                    <li class="list-group-item">
+                                      <input class="form-check-input me-1" type="checkbox" value={{privilegios[0]}} id={{privilegios[0]}} disabled>
+                                      {{privilegios[1]}}
+                                    </li>
+                                    {% endfor %}
+                                  </ul>
+                                </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <div class="card-footer bg-transparent border-success">
+            <div class="row">
+                <div class="col-6 justify-content-md-start">
+                    <a class="btn btn-primary" href="/seleccionar_recurso" role="button">Atrás</a>
+                </div>
+                <div class="col-6 d-grid gap-3 d-md-flex justify-content-md-end">
+                    <button type="submit" id="guardarButton" class="btn btn-success">Guardar</button>
+                </div>
+            </div>
+        </div>
+        </form>
+
+    </div>
+
+    <!-- ================================================ -->
+    <!-- Config Pantalla -->
+    <!-- ================================================ -->
+
+    <canvas class="my-4 w-100 chartjs-render-monitor" id="myChart" width="100%" height="100%"
+        style="display: block; height: 514px; width: 1218px;">
+    </canvas>
+
+</main>
+
+<script>
+    $("[name='checkRol']").change(function(){
+        const idRol = $(this).val();
+        $.ajax({
+            url: "/setear_privilegios_rol_seleccionado",
+            method: "POST",
+            data: {
+                "idRol": idRol
+            },
+            success: function (response) {
+                const privilegios = response.privilegios
+                $(`[type='checkbox']`).prop('checked',false)
+                for (const privilegio of privilegios) {
+                    $(`[type='checkbox'][value='${privilegio}']`).prop('checked',true)
+                }  
+            }
+        });
+    });
+</script>
+
+
+{% endblock %}

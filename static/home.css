@@ -1,0 +1,29 @@
+*{
+	box-sizing: border-box;
+}
+ 
+header{
+    padding: 15px;
+    background-color:#dcdcdc;
+    text-align: start;
+}
+
+.image_logo{
+    height: 55px;
+    display: flex;
+}
+
+.modal-content{
+    height: auto;
+    display: flex;
+}
+
+.modal-body{
+    height: 485px;
+    padding: 16px;
+}
+
+.floatingTextarea2{
+    height: 200px;
+}
+

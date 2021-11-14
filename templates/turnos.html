@@ -1,0 +1,164 @@
+{% extends 'base/base.html' %}
+
+<!-- ================================================ -->
+<!-- PANTALLA TURNOS -->
+<!-- ================================================ -->
+{% block turnos %}
+
+<main class="col-md-9 ms-sm-auto col-lg-10">
+  <div class="chartjs-size-monitor">
+    <div class="chartjs-size-monitor-expand">
+      <div class></div>
+    </div>
+    <div class="chartjs-size-monitor-shrink">
+      <div class=""></div>
+    </div>
+  </div>
+
+  <!-- Breadcrumb -->
+  <nav
+    style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);"
+    aria-label="breadcrumb">
+    <ol class="breadcrumb bg-light" style="padding: 15px; border: 0">
+      <li class="breadcrumb-item"><a href="/">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ data.titulo }}</li>
+    </ol>
+  </nav>
+
+  <!-- Titulo de la pantalla -->
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center border-bottom pb-0">
+    <h1 class="h2">{{ data.titulo }}</h1>
+  </div>
+
+
+  <!-- ================================================ -->
+  <!-- TURNERO -->
+  <!-- ================================================ -->
+
+  <table class="table table-hover">
+    <thead class="table-info">
+      <tr>
+        <th scope="col">Estado</th>
+        <th scope="col">Fecha</th>
+        <th scope="col">Hora desde</th>
+        <th scope="col">Hora hasta</th>
+        <th scope="col">Nombre y Apellido</th>
+        <th scope="col">Nro. documento</th>
+        <th scope="col">Especialidad</th>
+        <th scope="col">Profesional</th>
+        <th class="text-center" scope="col">Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for turno in data.turno %}
+      <tr>
+        <td>{{turno[1]}}</td>
+        <td>{{turno[2]}}</td>
+        <td>{{turno[3]}}</td>
+        <td>{{turno[4]}}</td>
+        <td>{{turno[6]}} {{turno[7]}}</td>
+        <td>{{turno[8]}}</td>
+        <td>{{turno[9]}}</td>
+        <td>{{turno[10]}}</td>
+        <td><a type="button" class="btn btn-primary openBtn" href="/receptar_turno/{{turno[0]}}" name="button_receptar_turno">
+            Receptar
+        </a>
+          <a type="button" class="btn btn-warning openBtn" href="/reprogramar_turno/{{turno[0]}}" name="button_reprogramar_turno">
+            Reprogramar
+          </a>
+          <a type="button" class="btn btn-danger openBtn" data-bs-toggle="modal" name="button_anular_turno"  id="{{turno[0]}}">
+            Anular
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+  <!-- Button trigger modal -->
+  <div class="form-row text-center">
+    <div class="col-12">
+      <a class="btn btn-success" href="/seleccionar_paciente" role="button">Asignar nuevo turno</a>
+    </div>
+  </div>
+
+
+  <div id="idSeccionModalReprogramarTurno">
+
+  </div>
+
+  <div id="idSeccionModalAnularTurno">
+
+  </div>
+
+  <!-- ================================================ -->
+  <!-- Config Pantalla -->
+  <!-- ================================================ -->
+
+  <canvas class="my-4 w-100 chartjs-render-monitor" id="myChart" width="100%" height="100%"
+    style="display: block; height: 514px; width: 1218px;">
+  </canvas>
+
+</main>
+
+<script>
+ 
+    //boton REPROGRAMAR
+    $(document).on('click', "[name='button_reprogramar_turno']", function () {
+    let id_turno = $(this).attr("id");
+    $.ajax({
+      url: `/modal_reprogramar_turno/${id_turno}`,
+      method: "GET",
+      data: {},
+      success: function (data) {
+        $('#idSeccionModalReprogramarTurno').append(data.htmlresponse)
+        $('#modal_reprogramar_turno').modal('show');
+      }
+    });
+  });
+  $(document).on('click', '#idCerrarModalReprogramarTurno', function () {
+    $.ajax({
+      success: function (data) {
+        $('#modal_reprogramar_turno').modal('hide');
+        {
+          $('#idSeccionModalReprogramarTurno').empty()
+        }
+      }
+    });
+  });
+
+
+   //boton ANULAR
+   $(document).on('click', "[name='button_anular_turno']", function () {
+    let id_turno = $(this).attr("id");
+    $.ajax({
+      url: `/modal_anular_turno/${id_turno}`,
+      method: "GET",
+      data: {},
+      success: function (data) {
+        $('#idSeccionModalAnularTurno').append(data.htmlresponse)
+        $('#modal_anular_turno').modal('show');
+      }
+    });
+  });
+  $(document).on('click', '#idCerrarModalAnularTurno', function () {
+    $.ajax({
+      success: function (data) {
+        $('#modal_anular_turno').modal('hide');
+        {
+          $('#idSeccionModalAnularTurno').empty()
+        }
+      }
+    });
+  });
+
+</script>
+
+
+
+
+
+
+
+{% endblock %}
